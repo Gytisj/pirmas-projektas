@@ -62,9 +62,16 @@ function App() {
     <>
       <Navbar />
 
+      {isLoggedIn && (
+        <header className="welcome-message">
+          <h1>Sveiki sugrįžę!</h1>
+          <p>Prisijungėte kaip admin.</p>
+        </header>
+      )}
+
       <main className="login-page">
-        <div className="login-card">
-          {!isLoggedIn ? (
+        {!isLoggedIn && (
+          <div className="login-card">
             <>
               <header className="login-card__header">
                 <h1>Prisijungti</h1>
@@ -109,13 +116,8 @@ function App() {
                 )}
               </form>
             </>
-          ) : (
-            <header className="login-card__header welcome-card">
-              <h1>Sveiki sugrįžę!</h1>
-              <p>Prisijungėte kaip admin.</p>
-            </header>
-          )}
-        </div>
+          </div>
+        )}
 
         {isLoggedIn && (
           <>

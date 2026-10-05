@@ -9,6 +9,27 @@
   flex-wrap: wrap;
 }
 
+.welcome-message {
+  width: 100%;
+  padding: 28px 20px 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.welcome-message h1 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.welcome-message p {
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
 .login-card {
   width: min(100%, 400px);
   padding: 36px 32px 32px;
@@ -113,20 +134,16 @@
   color: #dc2626;
 }
 
-.welcome-card {
-  text-align: center;
-}
-
-.welcome-card .login-card__header h1 {
-  color: var(--accent);
-}
-
 @media (max-width: 1024px) {
   .login-card {
     padding: 28px 22px 24px;
   }
 
   .login-card__header h1 {
+    font-size: 24px;
+  }
+
+  .welcome-message h1 {
     font-size: 24px;
   }
 }
