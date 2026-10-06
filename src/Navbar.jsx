@@ -25,8 +25,13 @@ function FlowlyLogo() {
   );
 }
 
-function Navbar() {
-  const navigationItems = ["Pagrindinis", "Užduotys", "Progresas", "Profilis"];
+function Navbar({ activePage, onNavigate }) {
+  const navigationItems = [
+    { label: "Pagrindinis", page: "home", disabled: false },
+    { label: "Užduotys", page: null, disabled: true },
+    { label: "Progresas", page: null, disabled: true },
+    { label: "Profilis", page: "profile", disabled: false },
+  ];
 
   return (
     <header className="navbar">
@@ -39,8 +44,15 @@ function Navbar() {
 
         <div className="navbar__links">
           {navigationItems.map((item) => (
-            <button className="navbar__link" type="button" aria-disabled="true" key={item}>
-              {item}
+            <button
+              className={`navbar__link${activePage === item.page ? " navbar__link--active" : ""}`}
+              type="button"
+              aria-disabled={item.disabled}
+              aria-current={activePage === item.page ? "page" : undefined}
+              key={item.label}
+              onClick={item.disabled ? undefined : () => onNavigate?.(item.page)}
+            >
+              {item.label}
             </button>
           ))}
         </div>
