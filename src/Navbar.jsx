@@ -45,8 +45,11 @@ function Navbar({ activePage, onNavigate }) {
         <div className="navbar__links">
           {navigationItems.map((item) => (
             <button
-              className={`navbar__link${activePage === item.page ? " navbar__link--active" : ""}`}
+              className={`navbar__link${
+                activePage === item.page ? " navbar__link--active" : ""
+              }`}
               type="button"
+              disabled={item.disabled}
               aria-disabled={item.disabled}
               aria-current={activePage === item.page ? "page" : undefined}
               key={item.label}
