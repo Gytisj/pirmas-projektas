@@ -58,6 +58,18 @@ function App() {
     );
   }
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const completedTaskCount = tasks.filter(
+    (task) => task.status === "Atlikta",
+  ).length;
+  const overdueTaskCount = tasks.filter((task) => {
+    if (task.status === "Atlikta" || !task.deadline) return false;
+
+    const deadline = new Date(`${task.deadline}T00:00:00`);
+    return deadline < today;
+  }).length;
+
   return (
     <>
       <Navbar />
@@ -121,6 +133,16 @@ function App() {
 
         {isLoggedIn && (
           <>
+            <section className="dashboard-summary" aria-label="Užduočių suvestinė">
+              <p>
+                <strong>{tasks.length} užduotys</strong>
+                <span aria-hidden="true">·</span>
+                <strong>{completedTaskCount} atliktos</strong>
+                <span aria-hidden="true">·</span>
+                <strong>{overdueTaskCount} vėluoja</strong>
+              </p>
+            </section>
+
             <TaskList
               tasks={tasks}
               loading={false}

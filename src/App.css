@@ -30,6 +30,30 @@
   line-height: 1.45;
 }
 
+.dashboard-summary {
+  width: min(100%, 400px);
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+.dashboard-summary p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-h);
+  font-size: 14px;
+}
+
+.dashboard-summary span {
+  color: var(--text);
+}
+
 .login-card {
   width: min(100%, 400px);
   padding: 36px 32px 32px;
