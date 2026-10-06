@@ -96,27 +96,31 @@
     border-color 0.2s ease;
 }
 
-/*
-    Punktai kol kas neaktyvūs (aria-disabled, ne disabled),
-    kad veiktų hover vizualas.
-  */
+/* Disabled punktai išlieka matomi, bet jų paspaudimas neveikia. */
 .navbar__link[aria-disabled="true"] {
   opacity: 1;
   color: #777684;
+  cursor: not-allowed;
 }
 
-.navbar__link[aria-disabled="true"]:hover {
+.navbar__link[aria-disabled="false"]:hover {
   color: #f4f2f7;
   background: rgba(187, 123, 246, 0.14);
   border-color: rgba(187, 123, 246, 0.32);
 }
 
-.navbar__link[aria-disabled="true"]:focus-visible {
+.navbar__link[aria-disabled="false"]:focus-visible {
   color: #f4f2f7;
   background: rgba(187, 123, 246, 0.14);
   border-color: rgba(187, 123, 246, 0.32);
   outline: 2px solid rgba(187, 123, 246, 0.45);
   outline-offset: 2px;
+}
+
+.navbar__link--active {
+  color: #f4f2f7;
+  background: rgba(187, 123, 246, 0.18);
+  border-color: rgba(187, 123, 246, 0.42);
 }
 
 /* -------------------- */
