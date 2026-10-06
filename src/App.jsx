@@ -3,9 +3,16 @@ import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import Navbar from "./Navbar";
 import AddTaskForm from "./AddTaskForm";
+import Profile from "./Profile";
 import "./App.css";
 
 function App() {
+  const user = {
+    name: "Jonas Jonaitis",
+    email: "jonas@flowly.lt",
+  };
+
+  const [activePage, setActivePage] = useState("home");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -71,7 +78,13 @@ function App() {
   }).length;
 
   return (
-    <>
+    <div
+      data-active-page={activePage}
+      data-profile-user={user.name}
+      data-profile-email={user.email}
+      data-profile-component={typeof Profile}
+      data-set-active-page={typeof setActivePage}
+    >
       <Navbar />
 
       {isLoggedIn && (
@@ -156,7 +169,7 @@ function App() {
           </>
         )}
       </main>
-    </>
+    </div>
   );
 }
 
