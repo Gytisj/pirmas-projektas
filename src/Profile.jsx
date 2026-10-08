@@ -9,7 +9,7 @@ function getInitials(name = "") {
   return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
 }
 
-function Profile({ user = {}, tasks = [] }) {
+function Profile({ user = {}, tasks = [], onLogout }) {
   const safeTasks = Array.isArray(tasks) ? tasks : [];
   const name = user?.name || user?.username || "Flowly naudotojas";
   const email = user?.email || "Nenurodytas";
@@ -87,6 +87,16 @@ function Profile({ user = {}, tasks = [] }) {
         <button className="profile-edit-button" type="button" disabled>
           Redaguoti profilį
         </button>
+
+        {onLogout && (
+          <button
+            className="profile-logout-button"
+            type="button"
+            onClick={onLogout}
+          >
+            Atsijungti
+          </button>
+        )}
       </section>
     </main>
   );

@@ -3,48 +3,87 @@ import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import Navbar from "./Navbar";
 import AddTaskForm from "./AddTaskForm";
+import AuthForm from "./AuthForm";
 import Profile from "./Profile";
 import "./App.css";
 import { createTask, deleteTask, getTasks, updateTask } from "./taskApi";
 
-function App() {
-  const user = {
-    name: "Jonas Jonaitis",
-    email: "jonas@flowly.lt",
-  };
+const USER_STORAGE_KEY = "flowlyUser";
 
+function getSavedUser() {
+  try {
+    return JSON.parse(localStorage.getItem(USER_STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function App() {
   const [activePage, setActivePage] = useState("home");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginError, setLoginError] = useState("");
+  const [currentUser, setCurrentUser] = useState(getSavedUser);
 
   const [tasks, setTasks] = useState([]);
-  const [tasksLoading, setTasksLoading] = useState(true);
+  const [tasksLoading, setTasksLoading] = useState(Boolean(currentUser));
   const [tasksError, setTasksError] = useState("");
   const [taskUpdateError, setTaskUpdateError] = useState("");
 
   useEffect(() => {
+    if (!currentUser) return;
+
+    let ignore = false;
+
     getTasks()
-      .then((response) => setTasks(response.data))
-      .catch(() => setTasksError("Nepavyko užkrauti užduočių."))
-      .finally(() => setTasksLoading(false));
-  }, []);
+      .then((response) => {
+        if (ignore) return;
+        setTasks(
+          response.data.filter(
+            (task) => task.username === currentUser.username,
+          ),
+        );
+      })
+      .catch(() => {
+        if (!ignore) setTasksError("Nepavyko užkrauti užduočių.");
+      })
+      .finally(() => {
+        if (!ignore) setTasksLoading(false);
+      });
 
-  function handleSubmit(event) {
-    event.preventDefault();
+    return () => {
+      ignore = true;
+    };
+  }, [currentUser]);
 
-    if (email === "admin" && password === "admin") {
-      setIsLoggedIn(true);
-      setLoginError("");
-      return;
+  function handleLogin(user) {
+    try {
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+    } catch {
+      // Jei localStorage neprieinamas, vartotojas liks prisijungęs iki perkrovimo.
     }
 
-    setLoginError("Neteisingas vartotojo vardas arba slaptažodis.");
+    setTasks([]);
+    setTasksError("");
+    setTaskUpdateError("");
+    setTasksLoading(true);
+    setCurrentUser(user);
+  }
+
+  function handleLogout() {
+    try {
+      localStorage.removeItem(USER_STORAGE_KEY);
+    } catch {
+      // Nieko nedarome – vartotojas vis tiek atjungiamas.
+    }
+
+    setCurrentUser(null);
+    setTasks([]);
+    setActivePage("home");
   }
 
   async function handleAddTask(newTask) {
-    const savedTask = await createTask(newTask);
+    const savedTask = await createTask({
+      ...newTask,
+      username: currentUser.username,
+    });
     setTasks((currentTasks) => [savedTask, ...currentTasks]);
   }
 
@@ -62,6 +101,7 @@ function App() {
         title: updatedTask.title,
         status: updatedTask.status,
         deadline: updatedTask.deadline,
+        username: currentUser.username,
       });
     } catch {
       setTasks((currentTasks) =>
@@ -114,64 +154,24 @@ function App() {
 
       {activePage === "home" && (
         <>
-          {isLoggedIn && (
+          {currentUser && (
             <header className="welcome-message">
               <h1>Sveiki sugrįžę!</h1>
-              <p>Prisijungėte kaip admin.</p>
+              <p>Prisijungėte kaip {currentUser.username}.</p>
+              <button
+                type="button"
+                className="logout-button"
+                onClick={handleLogout}
+              >
+                Atsijungti
+              </button>
             </header>
           )}
 
           <main className="login-page">
-            {!isLoggedIn && (
-              <div className="login-card">
-                <>
-                  <header className="login-card__header">
-                    <h1>Prisijungti</h1>
-                    <p>Įveskite savo duomenis, kad tęstumėte</p>
-                  </header>
+            {!currentUser && <AuthForm onLogin={handleLogin} />}
 
-                  <form className="login-form" onSubmit={handleSubmit}>
-                    <label className="login-field">
-                      <span>Vartotojo vardas</span>
-                      <input
-                        type="text"
-                        name="username"
-                        autoComplete="username"
-                        placeholder="admin"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                      />
-                    </label>
-
-                    <label className="login-field">
-                      <span>Slaptažodis</span>
-                      <input
-                        type="password"
-                        name="password"
-                        autoComplete="current-password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                      />
-                    </label>
-
-                    <button type="submit" className="login-submit">
-                      Prisijungti
-                    </button>
-
-                    {loginError && (
-                      <p className="login-error" role="alert">
-                        {loginError}
-                      </p>
-                    )}
-                  </form>
-                </>
-              </div>
-            )}
-
-            {isLoggedIn && (
+            {currentUser && (
               <>
                 <section
                   className="dashboard-summary"
@@ -206,7 +206,13 @@ function App() {
         </>
       )}
 
-      {activePage === "profile" && <Profile user={user} tasks={tasks} />}
+      {activePage === "profile" && (
+        <Profile
+          user={currentUser ?? {}}
+          tasks={tasks}
+          onLogout={currentUser ? handleLogout : undefined}
+        />
+      )}
     </>
   );
 }
