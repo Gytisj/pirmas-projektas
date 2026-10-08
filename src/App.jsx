@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import Navbar from "./Navbar";
 import AddTaskForm from "./AddTaskForm";
 import Profile from "./Profile";
 import "./App.css";
+import { createTask, deleteTask, getTasks, updateTask } from "./taskApi";
 
 function App() {
   const user = {
@@ -18,20 +19,17 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Sukurti prisijungimo formą",
-      status: "Atlikta",
-      deadline: "2026-10-01",
-    },
-    {
-      id: 2,
-      title: "Sukurti užduočių sąrašą",
-      status: "Vykdoma",
-      deadline: "2026-10-05",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
+  const [tasksError, setTasksError] = useState("");
+  const [taskUpdateError, setTaskUpdateError] = useState("");
+
+  useEffect(() => {
+    getTasks()
+      .then((response) => setTasks(response.data))
+      .catch(() => setTasksError("Nepavyko užkrauti užduočių."))
+      .finally(() => setTasksLoading(false));
+  }, []);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -45,24 +43,57 @@ function App() {
     setLoginError("Neteisingas vartotojo vardas arba slaptažodis.");
   }
 
-  function handleAddTask(newTask) {
-    setTasks((currentTasks) => [...currentTasks, newTask]);
+  async function handleAddTask(newTask) {
+    const savedTask = await createTask(newTask);
+    setTasks((currentTasks) => [savedTask, ...currentTasks]);
+  }
+
+  async function handleTaskUpdate(taskId, changes) {
+    const previousTask = tasks.find((task) => task.id === taskId);
+    const updatedTask = { ...previousTask, ...changes };
+
+    setTasks((currentTasks) =>
+      currentTasks.map((task) => (task.id === taskId ? updatedTask : task)),
+    );
+    setTaskUpdateError("");
+
+    try {
+      await updateTask(taskId, {
+        title: updatedTask.title,
+        status: updatedTask.status,
+        deadline: updatedTask.deadline,
+      });
+    } catch {
+      setTasks((currentTasks) =>
+        currentTasks.map((task) => (task.id === taskId ? previousTask : task)),
+      );
+      setTaskUpdateError("Nepavyko išsaugoti pakeitimo.");
+    }
   }
 
   function handleTaskStatusChange(taskId, status) {
-    setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId ? { ...task, status } : task,
-      ),
-    );
+    handleTaskUpdate(taskId, { status });
   }
 
   function handleTaskDeadlineChange(taskId, deadline) {
-    setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId ? { ...task, deadline } : task,
-      ),
-    );
+    handleTaskUpdate(taskId, { deadline });
+  }
+
+  function handleTaskTitleChange(taskId, title) {
+    handleTaskUpdate(taskId, { title });
+  }
+
+  async function handleTaskDelete(taskId) {
+    setTaskUpdateError("");
+
+    try {
+      await deleteTask(taskId);
+      setTasks((currentTasks) =>
+        currentTasks.filter((task) => task.id !== taskId),
+      );
+    } catch {
+      setTaskUpdateError("Nepavyko ištrinti užduoties.");
+    }
   }
 
   const today = new Date();
@@ -142,7 +173,10 @@ function App() {
 
             {isLoggedIn && (
               <>
-                <section className="dashboard-summary" aria-label="Užduočių suvestinė">
+                <section
+                  className="dashboard-summary"
+                  aria-label="Užduočių suvestinė"
+                >
                   <p>
                     <strong>{tasks.length} užduotys</strong>
                     <span aria-hidden="true">·</span>
@@ -154,9 +188,13 @@ function App() {
 
                 <TaskList
                   tasks={tasks}
-                  loading={false}
+                  loading={tasksLoading}
+                  error={tasksError}
+                  updateError={taskUpdateError}
                   onStatusChange={handleTaskStatusChange}
                   onDeadlineChange={handleTaskDeadlineChange}
+                  onTitleChange={handleTaskTitleChange}
+                  onDelete={handleTaskDelete}
                 />
 
                 <AddTaskForm onAddTask={handleAddTask} />
