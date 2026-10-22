@@ -5,7 +5,9 @@
 ## Skills
 
 - Dirbdamas šiame projekte nenaudok ir neskaityk jokių lokaliai įdiegtų skills.
+- Leidžiama naudoti ir skaityti šiame projekte išsaugotus skills, esančius `skills/` kataloge (pvz. `skills/tema` – `/tema <spalva>`).
 - Vadovaukis šiame faile pateiktomis projekto taisyklėmis.
+- Commit ir push daryk tik per `/ikelk` – jis privalomai paleidžia `/patikrink` ir neleidžia įkelti ne lietuviško UI teksto.
 
 ## Technologijos
 

@@ -53,7 +53,9 @@ function Navbar({ activePage, onNavigate }) {
               aria-disabled={item.disabled}
               aria-current={activePage === item.page ? "page" : undefined}
               key={item.label}
-              onClick={item.disabled ? undefined : () => onNavigate?.(item.page)}
+              onClick={
+                item.disabled ? undefined : () => onNavigate?.(item.page)
+              }
             >
               {item.label}
             </button>

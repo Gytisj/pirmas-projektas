@@ -2,8 +2,8 @@
   width: 100vw;
   margin-left: calc(50% - 50vw);
 
-  background: rgba(20, 20, 28, 0.96);
-  border-bottom: 1px solid #292936;
+  background: color-mix(in srgb, var(--card-bg) 96%, transparent);
+  border-bottom: 1px solid var(--card-border);
 
   box-sizing: border-box;
 }
@@ -41,7 +41,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #bb7bf6;
+  color: var(--accent);
 }
 
 .navbar__brand-icon svg {
@@ -105,22 +105,22 @@
 
 .navbar__link[aria-disabled="false"]:hover {
   color: #f4f2f7;
-  background: rgba(187, 123, 246, 0.14);
-  border-color: rgba(187, 123, 246, 0.32);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
 .navbar__link[aria-disabled="false"]:focus-visible {
   color: #f4f2f7;
-  background: rgba(187, 123, 246, 0.14);
-  border-color: rgba(187, 123, 246, 0.32);
-  outline: 2px solid rgba(187, 123, 246, 0.45);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
   outline-offset: 2px;
 }
 
 .navbar__link--active {
   color: #f4f2f7;
-  background: rgba(187, 123, 246, 0.18);
-  border-color: rgba(187, 123, 246, 0.42);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 /* -------------------- */

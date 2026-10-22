@@ -7,10 +7,10 @@
 
   padding: 12px 18px;
 
-  border: 1px solid #9c5fe8;
+  border: 1px solid var(--accent);
   border-radius: 10px;
 
-  background: #9c5fe8;
+  background: var(--accent);
   color: #ffffff;
 
   font-family: inherit;
@@ -26,8 +26,8 @@
 }
 
 .add-task__open-button:hover {
-  background: #ad72f2;
-  border-color: #ad72f2;
+  background: color-mix(in srgb, var(--accent) 88%, #fff);
+  border-color: color-mix(in srgb, var(--accent) 88%, #fff);
 }
 
 .add-task__open-button:active {
@@ -41,9 +41,9 @@
 
   padding: 24px;
 
-  background: #14141c;
+  background: var(--card-bg);
 
-  border: 1px solid #292936;
+  border: 1px solid var(--card-border);
   border-radius: 16px;
 
   box-sizing: border-box;
@@ -90,10 +90,10 @@
 
   padding: 0;
 
-  border: 1px solid #30303d;
+  border: 1px solid var(--field-border);
   border-radius: 9px;
 
-  background: #1b1b24;
+  background: var(--field-bg);
   color: #9d9ca8;
 
   font-family: inherit;
@@ -110,8 +110,8 @@
 
 .add-task__close:hover {
   color: #ffffff;
-  background: #24242f;
-  border-color: #3a3a48;
+  background: var(--field-bg-hover);
+  border-color: var(--field-border-hover);
 }
 
 /* Form */
@@ -143,12 +143,12 @@
 
   padding: 12px 14px;
 
-  border: 1px solid #30303d;
+  border: 1px solid var(--field-border);
   border-radius: 10px;
 
   outline: none;
 
-  background: #1b1b24;
+  background: var(--field-bg);
   color: #f4f2f7;
 
   font-family: inherit;
@@ -167,9 +167,9 @@
 
 .add-task__field input:focus,
 .add-task__field select:focus {
-  border-color: #9c5fe8;
+  border-color: var(--accent);
 
-  box-shadow: 0 0 0 3px rgba(156, 95, 232, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .add-task__field select {
@@ -207,27 +207,27 @@
 }
 
 .add-task__cancel {
-  border: 1px solid #30303d;
+  border: 1px solid var(--field-border);
 
   background: transparent;
   color: #a9a8b3;
 }
 
 .add-task__cancel:hover {
-  background: #1b1b24;
+  background: var(--field-bg);
   color: #ffffff;
 }
 
 .add-task__submit {
-  border: 1px solid #9c5fe8;
+  border: 1px solid var(--accent);
 
-  background: #9c5fe8;
+  background: var(--accent);
   color: #ffffff;
 }
 
 .add-task__submit:hover {
-  background: #ad72f2;
-  border-color: #ad72f2;
+  background: color-mix(in srgb, var(--accent) 88%, #fff);
+  border-color: color-mix(in srgb, var(--accent) 88%, #fff);
 }
 
 .add-task__cancel:disabled,
