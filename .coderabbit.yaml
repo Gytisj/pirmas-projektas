@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit konfigūracija Flowly projektui
+language: "lt-LT"
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "master"
+  path_filters:
+    - "!dist/**"
+    - "!node_modules/**"
+    - "!package-lock.json"
+  path_instructions:
+    - path: "src/**/*.{jsx,js}"
+      instructions: |
+        Projektas: React + Vite, tik JavaScript/JSX (be TypeScript).
+        - Funkciniai komponentai, state per React hooks.
+        - Kiekvienas komponentas turi atskirą .jsx ir .css failą src/ kataloge.
+        - Vartotojui matomas tekstas (JSX tekstas, mygtukai, placeholder, aria-label, klaidų pranešimai) turi būti lietuviškai.
+        - Venk nereikalingų bibliotekų ir dependencies.
+    - path: "src/**/*.css"
+      instructions: |
+        Nenaudoti Tailwind CSS ar CSS Modules.
+        Išlaikyti Flowly stilių: tamsi tema, violetinis akcentas, tamsios kortelės,
+        subtilūs borderiai, apvalinti kampai, responsive dizainas.
+    - path: "index.html"
+      instructions: |
+        title turi būti lietuviškai, o html lang – "lt".
+
+chat:
+  auto_reply: true
