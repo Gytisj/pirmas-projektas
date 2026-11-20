@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import AddTaskForm from "./AddTaskForm";
 import AuthForm from "./AuthForm";
 import Profile from "./Profile";
+import TaskStats from "./TaskStats";
 import "./App.css";
 import { createTask, deleteTask, getTasks, updateTask } from "./taskApi";
 
@@ -185,6 +186,9 @@ function App() {
                     <strong>{overdueTaskCount} vėluoja</strong>
                   </p>
                 </section>
+
+                <TaskStats tasks={tasks} />
+
 
                 <TaskList
                   tasks={tasks}
